@@ -23,7 +23,7 @@ router.post("/postTweet", (req, res) => {
     return;
   }
   const newTweet = new Tweet({
-    user: body.user_id,
+    user_id: body.user_id,
     message: body.message,
     hashtag: body.hashtag,
     date: new Date(),
