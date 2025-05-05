@@ -7,11 +7,13 @@ const { checkBody } = require("../modules/checkBody.js");
 
 // Afficher les tweets
 router.get("/getTweets", (req, res) => {
-  Tweet.find({}).then((data) => {
-    data
-      ? res.json({ result: true, tweets: data })
-      : res.json({ result: false, error: "Error tweets not finds" });
-  });
+  Tweet.find()
+    .populate("user_id", "firstname username")
+    .then((data) => {
+      data
+        ? res.json({ result: true, tweets: data })
+        : res.json({ result: false, error: "Error tweets not finds" });
+    });
 });
 
 // Ecrire un tweet
