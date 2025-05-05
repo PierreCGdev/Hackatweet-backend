@@ -4,7 +4,6 @@ const userSchema = mongoose.Schema({
   username: String,
   password: String,
   token: String,
-  tweet_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "tweets" }],
 });
 const User = mongoose.model("users", userSchema);
 module.exports = User;
