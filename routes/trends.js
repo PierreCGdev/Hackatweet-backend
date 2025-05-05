@@ -7,9 +7,14 @@ const Tweet = require("../models/tweets");
 // Afficher les trends
 router.get("/getTrends", (req, res) => {
   Tweet.find({}, "hashtag").then((trends) => {
-    trends
-      ? res.json({ result: true, trends: trends })
-      : res.json({ result: false, error: "Error trends not found" });
+    if (trends) {
+      const filterTrends = trends.filter((item) => {
+        return item.hashtag && item.hashtag.length > 0;
+      });
+      res.json({ result: true, trends: filterTrends });
+    } else {
+      res.json({ result: false, error: "Error trends not found" });
+    }
   });
 });
 

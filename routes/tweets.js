@@ -1,17 +1,26 @@
 var express = require("express");
 var router = express.Router();
+const moment = require("moment");
 
 require("../models/connection");
 const Tweet = require("../models/tweets");
 const { checkBody } = require("../modules/checkBody.js");
-console.log("ici");
 // Afficher les tweets
 router.get("/getTweets", (req, res) => {
   Tweet.find()
     .populate("user_id", "firstname username")
     .then((data) => {
+      const nowUtc = moment();
+      const newData = data.map((element) => {
+        const itemDate = moment(element.date);
+        element.countdown = itemDate.from(nowUtc);
+        return {
+          ...element.toObject(),
+          countdown: itemDate.from(nowUtc),
+        };
+      });
       data
-        ? res.json({ result: true, tweets: data })
+        ? res.json({ result: true, tweets: newData })
         : res.json({ result: false, error: "Error tweets not finds" });
     });
 });
