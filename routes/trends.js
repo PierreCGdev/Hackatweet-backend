@@ -10,7 +10,7 @@ router.get("/all", (req, res) => {
     if (trends) {
       const filterTrends = [];
       trends.map((item) => {
-        filterTrends.push(...item.hashtag);
+        item.hashtag && filterTrends.push(...item.hashtag);
       });
       let newObj = {};
       for (let item of filterTrends) {
@@ -22,7 +22,7 @@ router.get("/all", (req, res) => {
       }
       const newArray = [];
       for (let item in newObj) {
-        newArray.push({ hastag: item, numberTweet: newObj[item] });
+        newArray.push({ hashtag: item, numberTweet: newObj[item] });
       }
       res.json({ result: true, trends: newArray });
     } else {
