@@ -51,33 +51,26 @@ router.post("/postTweet", (req, res) => {
 });
 
 // Mettre à jour le like
-router.put("/like/:id", (req, res) => {
-  const tweetId = req.params.id;
+router.put("/like", (req, res) => {
+  if (!checkBody(req.body, ["tweetId", "userId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  const tweetId = req.body.tweetId;
   const userId = req.body.userId;
-
-  Tweet.findById(tweetId)
-    .then((tweet) => {
-      if (!tweet) {
-        return res.json({ result: false, error: "Tweet not found" });
-      }
-      const alreadyLikedByUser = tweet.likes.includes(userId);
-
-      alreadyLikedByUser
-        ? (tweet.likes = tweet.likes.filter((id) => id !== userId)) // On retire son userId du tableau → c’est un "unlike".
-        : tweet.likes.push(userId); // On ajoute son userId au tableau → c’est un "like".
-
-      return tweet.save();
-    })
-    .then((updatedTweet) => {
-      res.json({
-        result: true,
-        tweet: updatedTweet,
-        likeCount: updatedTweet.likes.length,
-      });
-    })
-    .catch((err) => {
-      res.json({ result: false, error: err.message });
+  Tweet.findOne({ _id: tweetId }).then((data) => {
+    if (!data) {
+      return res.json({ result: false, error: "Tweet not found" });
+    }
+    if (data.likes.includes(userId)) {
+      data.likes = data.likes.filter((e) => e.toString() !== userId.toString());
+    } else {
+      data.likes.push(userId);
+    }
+    data.save().then((updatedTweet) => {
+      res.json({ result: true, tweet: updatedTweet });
     });
+  });
 });
 
 // Supprimer un message
