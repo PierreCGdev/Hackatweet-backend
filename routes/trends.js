@@ -20,7 +20,11 @@ router.get("/all", (req, res) => {
           newObj[item] += 1;
         }
       }
-      res.json({ result: true, trends: newObj });
+      const newArray = [];
+      for (let item in newObj) {
+        newArray.push({ hastag: item, numberTweet: newObj[item] });
+      }
+      res.json({ result: true, trends: newArray });
     } else {
       res.json({ result: false, error: "Error trends not found" });
     }
