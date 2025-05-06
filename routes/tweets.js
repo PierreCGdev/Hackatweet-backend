@@ -59,17 +59,18 @@ router.put("/like", (req, res) => {
   const tweetId = req.body.tweetId;
   const userId = req.body.userId;
   Tweet.findOne({ _id: tweetId }).then((data) => {
+    let allReadyTweet = false;
     if (!data) {
       return res.json({ result: false, error: "Tweet not found" });
     }
-    const ownTweet = userId.toString() === data.user_id.toString();
     if (data.likes.includes(userId)) {
       data.likes = data.likes.filter((e) => e.toString() !== userId.toString());
+      allReadyTweet = true;
     } else {
       data.likes.push(userId);
     }
     data.save().then((updatedTweet) => {
-      res.json({ result: true, ownTweet, tweet: updatedTweet });
+      res.json({ result: true, allReadyTweet, tweet: updatedTweet });
     });
   });
 });
