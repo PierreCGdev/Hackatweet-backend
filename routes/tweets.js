@@ -62,13 +62,14 @@ router.put("/like", (req, res) => {
     if (!data) {
       return res.json({ result: false, error: "Tweet not found" });
     }
+    const ownTweet = userId.toString() === data.user_id.toString();
     if (data.likes.includes(userId)) {
       data.likes = data.likes.filter((e) => e.toString() !== userId.toString());
     } else {
       data.likes.push(userId);
     }
     data.save().then((updatedTweet) => {
-      res.json({ result: true, tweet: updatedTweet });
+      res.json({ result: true, ownTweet, tweet: updatedTweet });
     });
   });
 });
