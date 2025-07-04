@@ -3,6 +3,7 @@
 ## 📋 Description
 
 Backend API pour une application de microblogging inspirée de Twitter, développée en duo sur 2 jours et améliorée par la suite. Cette API REST permet la gestion des utilisateurs, des tweets et des tendances.
+Elle a été réalisée pendant ma formation à La Capsule
 
 ## 🚀 Technologies utilisées
 
